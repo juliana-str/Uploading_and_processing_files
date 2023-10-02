@@ -24,5 +24,3 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
         File.objects.create(data=request.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-
