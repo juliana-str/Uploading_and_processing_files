@@ -6,8 +6,8 @@ from files.views import FileViewSet, UploadViewSet
 app_name = 'files'
 
 router = DefaultRouter()
-router.register('upload/', UploadViewSet, basename='upload')
-router.register('files/', FileViewSet, basename='files')
+router.register('upload', UploadViewSet, basename='upload')
+router.register('files', FileViewSet, basename='files')
 
 
 urlpatterns = [

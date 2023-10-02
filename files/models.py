@@ -3,6 +3,7 @@ from django.db import models
 
 class File(models.Model):
     file = models.FileField(
+        db_index=True,
         upload_to='uploads/',
         verbose_name = 'Файл'
     )

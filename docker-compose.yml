@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  pg_data:
+  media:
+
+services:
+  db:
+    image: postgres:13.10-files
+    env_file: .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  backend:
+    build: ./Uploading_and_processing_files/
+    env_file: .env
+    volumes:
+      - media:/app/media
+
+  gateway:
+    build: ./nginx/
+    env_file: .env
+    volumes:
+      - media:/app/media
+    ports:
+      - 8000:80
