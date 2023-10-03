@@ -4,19 +4,19 @@ from rest_framework import serializers
 from .models import File
 
 
-class FileSerializer(serializers.ModelSerializer):
-    """Сериалайзер для модели файлов, просмотр, загрузка."""
-    processed = serializers.SerializerMethodField()
+class FileListSerializer(serializers.ModelSerializer):
+    """Сериалайзер для модели файлов, просмотр списка файлов."""
+    processed = serializers.BooleanField()
 
     class Meta:
         fields = ('file', 'uploaded_at', 'processed')
         model = File
 
-    def get_processed(self, obj):
-        return File.objects.filter(obj=obj).exists()
 
-    @transaction.atomic
-    def create(self, validated_data):
-        file = File.objects.create(**validated_data)
+class FilePostSerializer(serializers.ModelSerializer):
+    """Сериалайзер для модели файлов, загрузка."""
+    file = serializers.FileField()
 
-        return file
+    class Meta:
+        fields = ('file', 'uploaded_at')
+        model = File
