@@ -7,6 +7,16 @@ from .serializers import FileListSerializer, FilePostSerializer
 from .tasks import processing_files
 
 
+import logging
+from django.http import HttpResponse
+logger = logging.getLogger(__name__)
+
+
+def index(request):
+    logger.error("Test!!")
+    return HttpResponse("Hello logging world.")
+
+
 class FileViewSet(mixins.ListModelMixin, GenericViewSet):
     """Вьюсет для просмотра списка загруженных файлов."""
     serializer_class = FileListSerializer
