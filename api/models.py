@@ -4,7 +4,7 @@ from django.db import models
 class File(models.Model):
     file = models.FileField(
         db_index=True,
-        upload_to='files/media',
+        upload_to='api/media',
         verbose_name='Файл'
     )
     uploaded_at = models.DateTimeField(

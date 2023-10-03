@@ -1,13 +1,13 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
-from files.views import FileViewSet, UploadViewSet
+from api.views import FileViewSet, UploadViewSet
 
 app_name = 'api'
 
 router = DefaultRouter()
 router.register('upload', UploadViewSet, basename='upload')
-router.register('files', FileViewSet, basename='files')
+router.register('api', FileViewSet, basename='api')
 
 
 urlpatterns = [
