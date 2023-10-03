@@ -1,20 +1,15 @@
+import logging
 from requests import Response
 from rest_framework import mixins, status
+from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import GenericViewSet
+from django.http import HttpResponse
 
 from .models import File
 from .serializers import FileListSerializer, FilePostSerializer
 from .tasks import processing_files
 
-
-import logging
-from django.http import HttpResponse
 logger = logging.getLogger(__name__)
-
-
-def index(request):
-    logger.error("Test!!")
-    return HttpResponse("Hello logging world.")
 
 
 class FileViewSet(mixins.ListModelMixin, GenericViewSet):
@@ -32,6 +27,20 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
         serializer = self.get_serializer(
             data=request.data)
         serializer.is_valid(raise_exception=True)
-        file = File.objects.create(request.data)
-        processing_files.delay(file.id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            self.perform_create(serializer)
+            logging.debug('Файл сохранен.')
+        except SystemError as error:
+            logging.error(f'Файл не сохранен! {error}.', exc_info=True)
+            raise SystemError(f'Файл не сохранен! {error}')
+
+
+
+        file = get_object_or_404(File, id=self.kwargs['id'])
+        try:
+            processing_files.delay(file.id)
+            logging.debug('Файл обработан.')
+        except SystemError as error:
+            logging.error(f'Файл не обработан! {error}.', exc_info=True)
+
+        return HttpResponse(serializer.data, status=status.HTTP_201_CREATED)
