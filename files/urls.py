@@ -3,7 +3,7 @@ from django.urls import path, include
 
 from files.views import FileViewSet, UploadViewSet
 
-app_name = 'files'
+app_name = 'api'
 
 router = DefaultRouter()
 router.register('upload', UploadViewSet, basename='upload')
