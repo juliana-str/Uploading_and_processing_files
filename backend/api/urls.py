@@ -1,7 +1,7 @@
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 
-from api.views import FileViewSet, UploadViewSet
+from backend.api.views import FileViewSet, UploadViewSet
 
 app_name = 'api'
 
