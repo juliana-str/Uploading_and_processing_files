@@ -30,24 +30,21 @@ services:
       - static:/static
       - media:/media
     ports:
-      - 8000:80
+      - 9000:80
 
   web:
-    build: ../Uploading_and_processing_files
+    build: ./backend/
     env_file: .env
-    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ../Uploading_and_processing_files:/usr/src/app
-    ports:
-      - 8000:80
+      - ./backend/Uploading_and_processing_files:/usr/src/app
     depends_on:
       - redis
 
   celery:
-    build: ../Uploading_and_processing_files
-    command: celery worker --app=core --loglevel=info
+    build: ./backend/
+    command: celery worker --app=Uploading_and_processing_files --loglevel=info
     volumes:
-      - ../Uploading_and_processing_files:/usr/src/app
+      - ./backend/Uploading_and_processing_files:/usr/src/app
     env_file: .env
     depends_on:
       - web
