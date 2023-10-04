@@ -116,32 +116,32 @@ CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "console": {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
             'format': '%(name)-12s %(levelname)-8s %(message)s'
-            },
+        },
         'file': {
             'format': '%(asctime)s %(name)-12s %(levelname)-8s %(message)s'
         }
     },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console'
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'formatter': 'file',
             'filename': 'debug.log'
-        },
+        }
     },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
-            "propagate": False,
-        },
-    },
+    'loggers': {
+        '': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'file']
+        }
+    }
 }
