@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from .models import File
 
+FORMATS = ['txt', 'csv', 'xlsx', 'yml']
+
 
 class FileListSerializer(serializers.ModelSerializer):
     """Сериалайзер для модели файлов, просмотр списка файлов."""
@@ -19,3 +21,11 @@ class FilePostSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'file', 'uploaded_at')
         model = File
+
+    def validate_file(self, file):
+        if file.splitext(file)[-1].lower() in FORMATS:
+            return file
+        raise TypeError(
+            'Неверный формат файла! '
+            'Загрузить можно файлы с расширением txt, csv, xlsx, yml'
+        )
