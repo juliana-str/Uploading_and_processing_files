@@ -4,6 +4,7 @@ volumes:
   pg_data:
   static:
   media:
+  web:
 
 services:
   db:
@@ -17,13 +18,41 @@ services:
     env_file: .env
     volumes:
       - static:/static
-      - media:/app/media
+      - media:/media
+    depends_on:
+      - db
+      - redis
 
   nginx:
     build: ./nginx/
     env_file: .env
     volumes:
       - static:/static
-      - media:/app/media
+      - media:/media
     ports:
       - 8000:80
+
+  web:
+    build: ../Uploading_and_processing_files
+    env_file: .env
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ../Uploading_and_processing_files:/usr/src/app
+    ports:
+      - 8000:80
+    depends_on:
+      - redis
+
+  celery:
+    build: ../Uploading_and_processing_files
+    command: celery worker --app=core --loglevel=info
+    volumes:
+      - ../Uploading_and_processing_files:/usr/src/app
+    env_file: .env
+    depends_on:
+      - web
+      - redis
+
+  redis:
+    image:
+      redis:5-alpine
