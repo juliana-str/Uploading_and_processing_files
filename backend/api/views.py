@@ -32,8 +32,7 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
         except SystemError as error:
             logging.error(f'Файл не сохранен! {error}.', exc_info=True)
             raise SystemError(f'Файл не сохранен! {error}')
-        return HttpResponse(file.items(),
-                            status=status.HTTP_201_CREATED,sep='/n')
+        return HttpResponse(file, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
         serializer.save()
