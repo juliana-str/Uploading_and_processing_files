@@ -10,5 +10,5 @@ def processing_files(file):
     with open(file, "r", encoding='utf-8') as f:
         text = f.read()
     if len(text) > 0:
-        file['processed'] = 'True'
+        file.processed = 'True'
     raise ValueError('Файл не должен быть пустым!')
