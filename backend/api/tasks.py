@@ -1,6 +1,5 @@
 from celery import task
 from celery.utils.log import get_logger
-from .serializers import FilePostSerializer
 
 logger = get_logger(__name__)
 
@@ -8,10 +7,8 @@ logger = get_logger(__name__)
 @task
 def processing_files(file):
     """Задача для обработки загруженного файла."""
-    serializer = FilePostSerializer(file)
-    serializer.is_valid(raise_exception=True)
-    if file.get('file'):
+    with open(file, "r", encoding='utf-8') as f:
+        text = f.read()
+    if len(text) > 0:
         file['processed'] = 'True'
-        file.perform_update(serializer)
-
     raise ValueError('Файл не должен быть пустым!')
