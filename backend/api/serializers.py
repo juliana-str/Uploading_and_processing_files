@@ -23,7 +23,7 @@ class FilePostSerializer(serializers.ModelSerializer):
         model = File
 
     def validate_file(self, file):
-        if file.items().split('.')[-1].lower() in FORMATS:
+        if file['content_type'] in FORMATS and file['size'] > 0:
             return file
         raise TypeError(
             'Неверный формат файла! '
