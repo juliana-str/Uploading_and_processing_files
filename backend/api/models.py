@@ -12,6 +12,7 @@ class File(models.Model):
         auto_now_add=True
     )
     processed = models.BooleanField(
+        default='False',
         verbose_name='Обработан'
     )
 

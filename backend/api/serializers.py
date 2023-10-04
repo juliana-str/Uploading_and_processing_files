@@ -9,7 +9,7 @@ class FileListSerializer(serializers.ModelSerializer):
     processed = serializers.BooleanField()
 
     class Meta:
-        fields = ('file', 'uploaded_at', 'processed')
+        fields = ('id', 'file', 'uploaded_at', 'processed')
         model = File
 
 
@@ -18,5 +18,5 @@ class FilePostSerializer(serializers.ModelSerializer):
     file = serializers.FileField()
 
     class Meta:
-        fields = ('file', 'uploaded_at')
+        fields = ('id', 'file', 'uploaded_at')
         model = File

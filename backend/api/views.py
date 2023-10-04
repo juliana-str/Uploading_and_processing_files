@@ -4,6 +4,7 @@ from rest_framework import mixins, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import GenericViewSet
 from django.http import HttpResponse
+from Uploading_and_processing_files.celery import app
 
 from .models import File
 from .serializers import FileListSerializer, FilePostSerializer
@@ -24,23 +25,21 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         """Метод загрузки файла."""
-        serializer = self.get_serializer(
-            data=request.data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
             self.perform_create(serializer)
             logging.debug('Файл сохранен.')
+            file = serializer.data
+            processing_files.delay(file)
         except SystemError as error:
             logging.error(f'Файл не сохранен! {error}.', exc_info=True)
             raise SystemError(f'Файл не сохранен! {error}')
+        return HttpResponse(serializer.data,
+                            status=status.HTTP_201_CREATED,
+                            detail='Файл сохранен.')
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
-
-        file = get_object_or_404(File, id=self.kwargs['id'])
-        try:
-            processing_files.delay(file.id)
-            logging.debug('Файл обработан.')
-        except SystemError as error:
-            logging.error(f'Файл не обработан! {error}.', exc_info=True)
-
-        return HttpResponse(serializer.data, status=status.HTTP_201_CREATED)
