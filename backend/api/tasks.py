@@ -8,7 +8,8 @@ logger = get_logger(__name__)
 def processing_files(file):
     """Задача для обработки загруженного файла."""
     logger.debug(file)
-    if file:
-        file.processed = 'True'
-        return file
+    if file.get('file'):
+        file['processed'] = 'True'
+        file.save()
+
     raise ValueError('Файл не должен быть пустым!')
