@@ -1,10 +1,7 @@
 import logging
-from requests import Response
 from rest_framework import mixins, status
-from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import GenericViewSet
 from django.http import HttpResponse
-from Uploading_and_processing_files.celery import app
 
 from .models import File
 from .serializers import FileListSerializer, FilePostSerializer

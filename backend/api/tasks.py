@@ -1,6 +1,6 @@
 from celery import task
 from celery.utils.log import get_logger
-from backend.api.serializers import FilePostSerializer
+from .serializers import FilePostSerializer
 
 logger = get_logger(__name__)
 
