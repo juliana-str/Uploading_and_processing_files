@@ -1,4 +1,4 @@
-[![foodgram_workflow](https://github.com/juliana-str/foodgram-project-react/actions/workflows/main.yml/badge.svg)](https://github.com/juliana-str/foodgram-project-react/actions/workflows/main.yml)
+[![Uploading_and_processing_files_workflow](https://github.com/juliana-str/Uploading_and_processing_files/actions/workflows/main.yml/badge.svg)](https://github.com/juliana-str/Uploading_and_processing_files/actions/workflows/main.yml)
 # "Загрузка и обработка файлов" (Uploading_and_processing_files)
 
 ## 1. [Описание](#1)
