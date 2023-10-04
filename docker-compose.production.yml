@@ -18,7 +18,7 @@ services:
     image: julianastr/uploading_and_processing_files_backend
     env_file: .env
     volumes:
-      - static:/static
+      - static:/backend_static
       - media:/media
     depends_on:
       - db
@@ -28,7 +28,7 @@ services:
     image: julianastr/uploading_and_processing_files_nginx
     env_file: .env
     volumes:
-      - static:/static
+      - static:/staticfiles
       - media:/media
     ports:
       - 9000:80
