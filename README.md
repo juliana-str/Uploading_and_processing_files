@@ -79,7 +79,7 @@ systemctl status docker
 ## 3. База данных и переменные окружения <a id=3></a>
 
 Проект использует базу данных PostgreSQL.  
-Для подключения и выполненя запросов к базе данных необходимо создать и заполнить файл ".env" с переменными окружения в папке "./infra/".
+Для подключения и выполненя запросов к базе данных необходимо создать и заполнить файл ".env" с переменными окружения в корне проекта.
 
 Шаблон для заполнения файла ".env":
 ```python
@@ -193,10 +193,9 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 ## 6. Техническая информация <a id=6></a>
 
-Стек технологий: Python 3, Django, Django Rest, React, Docker, PostgreSQL, nginx, gunicorn, Celery, Redis, github-actions, CI-CD.
+Стек технологий: Python 3, Django, Django Rest, Docker, PostgreSQL, nginx, gunicorn, Celery, Redis, github-actions, CI-CD.
 
 Веб-сервер: nginx (контейнер nginx)  
-Frontend фреймворк: React (контейнер frontend)  
 Backend фреймворк: Django (контейнер backend)  
 API фреймворк: Django REST (контейнер backend)  
 База данных: PostgreSQL (контейнер db)
