@@ -1,11 +1,13 @@
-from celery import shared_task
-from .models import File
+from celery import task
+from celery.utils.log import get_logger
+
+logger = get_logger(__name__)
 
 
-@shared_task
-def processing_files(file_id):
+@task
+def processing_files(file):
     """Задача для обработки загруженного файла."""
-    file = File.objects.get(id=file_id)
+    logger.debug(file)
     if file:
         file.processed = 'True'
         return file
