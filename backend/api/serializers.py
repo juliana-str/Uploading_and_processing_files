@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 
 from .models import File
@@ -23,9 +25,11 @@ class FilePostSerializer(serializers.ModelSerializer):
         model = File
 
     def validate_file(self, file):
-        if file.content_type in FORMATS:
-            return file
-        raise TypeError(
-            'Неверный формат файла! '
-            'Загрузить можно файлы с расширением txt, csv, xlsx, yml'
-        )
+        logging.debug(file.content_type)
+        return file
+        # if file.content_type in FORMATS:
+        #     return file
+        # raise TypeError(
+        #     'Неверный формат файла! '
+        #     'Загрузить можно файлы с расширением txt, csv, xlsx, yml'
+        # )
