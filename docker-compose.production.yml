@@ -4,7 +4,6 @@ volumes:
   pg_data:
   static:
   media:
-  web:
   celery:
   redis:
 
@@ -34,24 +33,14 @@ services:
     ports:
       - 9000:80
 
-  web:
-    build: ./backend/
-    env_file: .env
-    volumes:
-      - ./backend/Uploading_and_processing_files:/usr/src/app
-    depends_on:
-      - redis
-
   celery:
-    build: ./backend/
+    image: julianastr/uploading_and_processing_files_backend
     command: celery worker --app=Uploading_and_processing_files --loglevel=info
     volumes:
-      - ./backend/Uploading_and_processing_files:/usr/src/app
+      - ./Uploading_and_processing_files:/usr/src/app
     env_file: .env
     depends_on:
-      - web
       - redis
 
   redis:
-    image:
-      redis:5-alpine
+    image: redis:5-alpine
