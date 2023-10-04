@@ -1,0 +1,102 @@
+name: Main Uploading_and_processing_files workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_push_to_docker_hub:
+    name: Push Docker image to DockerHub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        # Получение исходного кода из репозитория
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        # Установка сборщика контейнеров Docker
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker
+        # Авторизация на Docker Hub
+        uses: docker/login-action@v2
+        # При помощи with передаём в action параметры username и password
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to DockerHub
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend/
+          push: true
+          tags: julianastr/uploading_and_processing_files_backend:latest
+
+  build_nginx_and_push_to_docker_hub:
+    name: Push nginx Docker image to DockerHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Push to DockerHub
+        uses: docker/build-push-action@v4
+        with:
+          context: ./nginx/
+          push: true
+          tags: julianastr/uploading_and_processing_files_nginx:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build_and_push_to_docker_hub
+      - build_nginx_and_push_to_docker_hub
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      # Копируем docker-compose.production.yml на продакшен-сервер
+      - name: Copy docker-compose.production.yml via ssh
+        uses: appleboy/scp-action@master
+        # Передаём параметры для action appleboy/scp-action:
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "docker-compose.production.yml"
+          target: "Uploading_and_processing_files"
+      - name: Executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd foodgram
+            # Выполняет pull образов с Docker Hub
+            sudo docker compose -f docker-compose.production.yml pull
+            # Перезапускает все контейнеры в Docker Compose
+            sudo docker compose -f docker-compose.production.yml down
+            sudo docker compose -f docker-compose.production.yml up -d
+            # Выполняет миграции и сбор статики
+            sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
+            sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
+            sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/static/. /static/
+  send_message:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message:
+            Деплой foodgram успешно выполнен!
