@@ -6,11 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', '1234')
 
-DEBUG = True
-# DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'uploadproject.hopto.org', '158.160.30.4']
-# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
