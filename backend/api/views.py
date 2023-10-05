@@ -1,6 +1,5 @@
 import logging
 from rest_framework import mixins, status
-from rest_framework.generics import get_object_or_404
 from rest_framework.viewsets import GenericViewSet
 from django.http import HttpResponse
 
@@ -29,7 +28,6 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
             self.perform_create(serializer)
             logging.debug('Файл сохранен.')
             file = serializer.data
-            logging.debug(file)
             processing_files.delay(file)
         except SystemError as error:
             logging.error(f'Файл не сохранен! {error}.', exc_info=True)
@@ -38,5 +36,3 @@ class UploadViewSet(mixins.CreateModelMixin, GenericViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
-
-

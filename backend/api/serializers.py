@@ -1,5 +1,3 @@
-import logging
-
 from rest_framework import serializers
 
 from .models import File
@@ -10,16 +8,17 @@ class FileListSerializer(serializers.ModelSerializer):
     processed = serializers.BooleanField()
 
     class Meta:
-        fields = ('id', 'file', 'uploaded_at', 'processed')
+        fields = '__all__'
         model = File
 
 
 class FilePostSerializer(serializers.ModelSerializer):
     """Сериалайзер для модели файлов, загрузка."""
     file = serializers.FileField()
+    processed = serializers.BooleanField(default='False')
 
     class Meta:
-        fields = ('id', 'file', 'uploaded_at')
+        fields = '__all__'
         model = File
 
     def validate_file(self, file):
