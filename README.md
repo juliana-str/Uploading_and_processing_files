@@ -128,7 +128,7 @@ docker build -t username/uploading_and_processing_files_backend .
 Из папки "./nginx/" выполнить команду:
 
 ```bash
-docker build -t username/uploading_and_processing_files_nginx  .
+docker build -t username/uploading_and_processing_files_nginx .
 ```
 
 После создания образов можно создавать и запускать контейнеры. 
