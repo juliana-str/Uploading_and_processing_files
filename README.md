@@ -164,7 +164,7 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 ```
 {
-    "file": "http://uploadproject.hopto.org/media/api/media/racion-chernogo-aista.jpg",
+    "file": "http://uploadproject.hopto.org/media/test_file.txt",
     "uploaded_at": "2023-10-04T12:58:37.432541Z",
     "processed": false
 }
@@ -182,10 +182,11 @@ docker-compose exec backend python manage.py collectstatic --no-input
     "previous": null,
     "results": [
         {
-            "id": 1,
-            "file": "http://uploadproject.hopto.org/media/api/media/racion-chernogo-aista.jpg",
-            "uploaded_at": "2023-10-04T12:58:37.432541Z",
-            "processed": true
+            "id": 8,
+            "processed": true,
+            "file": "http://uploadproject.hopto.org/media/test_file.txt",
+            "uploaded_at": "2023-10-05T18:38:51.757641+03:00"
+        },
         }
     ]
 }

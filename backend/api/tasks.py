@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 
 @task
-def processing_files(file):
+def processing_files(file_id):
     """Задача для обработки загруженного файла."""
     # link = file.get('file')
     # try:
@@ -24,7 +24,6 @@ def processing_files(file):
     #         logging.debug('Файл содержит неизвестные ссылки.')
 
     try:
-        file_id = file.get('id')
         File.objects.filter(id=file_id).update(processed='True')
         logging.debug('Файл обработан.')
     except ProcessLookupError as error:
