@@ -18,3 +18,6 @@ class File(models.Model):
 
     class Meta:
         ordering = ['uploaded_at']
+
+    def __str__(self):
+        return f'Файл {self.file} загружен {self.uploaded_at}'
